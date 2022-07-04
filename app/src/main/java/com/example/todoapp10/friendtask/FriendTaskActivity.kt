@@ -1,47 +1,32 @@
-package com.example.todoapp10
+package com.example.todoapp10.friendtask
 
-import android.content.Intent
-import android.graphics.*
 import android.os.Bundle
 import android.util.Log
-import android.view.Menu
-import android.view.MenuItem
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
+import com.example.bs_tender.FriendTaskDeserializer
 import com.example.bs_tender.UserListDeserializer
-import com.example.todoapp10.Apply.ApplyFriendActivity
-import com.example.todoapp10.friend.FriendActivity
-import com.example.todoapp10.friendtask.FriendTaskActivity
-import com.github.kittinunf.fuel.httpDelete
 import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.httpPost
-import com.github.kittinunf.fuel.json.responseJson
 import kotlinx.android.synthetic.main.activity_main.*
 import todoapp10.R
-import com.github.kittinunf.result.Result;
-import org.json.JSONArray
-import org.json.JSONObject
 import java.text.SimpleDateFormat
-import java.util.HashMap
 
 
-class MainActivity : AppCompatActivity() {
+class FriendTaskActivity : AppCompatActivity() {
 
-    val list = arrayListOf<TodoModel>()
-    var adapter = TodoAdapter(list)
+    val list = arrayListOf<FriendTaskModel>()
+    var adapter = FriendTaskAdapter(list)
 
     override fun onResume() {
         super.onResume()
 
-            val baseUrl: String = "http://160.16.141.77:50180/user/1/task?name=kato&pass=soma"
+        val id = 1
+
+            val baseUrl: String = "http://160.16.141.77:50180/user/${id}/friend/task"
             val endpoint: String = "/match.json"
             val url: String = baseUrl
 
-            url.httpGet().responseObject(UserListDeserializer()) { req, res, result ->
+            url.httpGet().responseObject(FriendTaskDeserializer()) { req, res, result ->
                 val(users,err) = result
                 Log.i("test","${users}")
                 list.clear()
@@ -49,9 +34,9 @@ class MainActivity : AppCompatActivity() {
                     users.forEach {
                         var myCalendar = java.util.Calendar.getInstance()
                         val sdf = SimpleDateFormat("yyyy/MM/dd")
-                        myCalendar.time = sdf.parse(it.deadLine)
+                        myCalendar.time = sdf.parse(it.date.toString())
 
-                        list.add(TodoModel(it.name,it.tag,myCalendar.time.time,it.priority,it.share,it.taskId.toLong(),it.tag))
+                        list.add(FriendTaskModel(it.id,it.userName,it.title,it.category,it.date,it.priority,it.share,it.tag))
                     }
                     Log.i("testlist","${list}")
                 }
@@ -66,17 +51,19 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_friend_task)
         setSupportActionBar(toolbar)
         todoRv.apply {
-            layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = this@MainActivity.adapter
+            layoutManager = LinearLayoutManager(this@FriendTaskActivity)
+            adapter = this@FriendTaskActivity.adapter
         }
         initSwipe()
     }
 
-    fun initSwipe() {
 
+
+    fun initSwipe() {
+        /*
 
         val simpleItemTouchCallback = object : ItemTouchHelper.SimpleCallback(
             0,
@@ -128,10 +115,6 @@ class MainActivity : AppCompatActivity() {
                             Log.i("test","${res}")
                         }
                     onResume()
-
-
-
-
 
 
                 } else if (direction == ItemTouchHelper.RIGHT) {
@@ -260,88 +243,15 @@ class MainActivity : AppCompatActivity() {
 
     fun displayTodo(newText: String = "") {
 
+
+         */
+
+
     }
-
-
-    //フレンドリスト
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.frendlist -> {
-                startActivity(Intent(this, FriendActivity::class.java))
-            }
-            R.id.searchfriend -> {
-                startActivity(Intent(this, SearchActivity::class.java))
-            }
-            R.id.applyfriend-> {
-                startActivity(Intent(this, ApplyFriendActivity::class.java))
-            }
-            R.id.friendtask-> {
-                startActivity(Intent(this, FriendTaskActivity::class.java))
-            }
-        }
-        return super.onOptionsItemSelected(item)
-    }
-
-
-
-
-    //新しいタスクの作成？
-    fun openNewTask(view: View) {
-        startActivity(Intent(this, TaskActivity::class.java))
-    }
-
-    //フレンドリスト
-
 }
 
 
 
-//通信テスト
-
-class HttpAccessor {
-
-    fun getJson(url: String): JSONObject {
-        var red = JSONObject(mapOf("null" to 1))
-        url.httpGet().responseJson() { request, response, result ->
-            when (result) {
-                is Result.Failure -> {
-
-                    val ex = result.getException()
-                    Log.i("Test", "${ex.toString()}")
-                    red = JSONObject(mapOf("message" to ex.toString()))
-                }
-                is Result.Success -> {
-
-                    red = result.get().obj()
-
-                }
-            }
-        }
-        return red
-    }
-    fun getJsonArray(url: String): JSONArray {
-        var red = JSONArray()
-        url.httpGet().responseJson() { request, response, result ->
-            when (result) {
-                is Result.Failure -> {
-
-                    val ex = result.getException()
-                    Log.i("Test","${ex.toString()}")
-                    red.put(JSONObject(mapOf("message" to ex.toString())))
-                }
-                is Result.Success -> {
-
-                    red = result.get() as JSONArray
-
-                }
-            }
-        }
-        return red
-    }
-
-
-}
 
 
 

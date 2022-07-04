@@ -3,16 +3,14 @@ package com.example.todoapp10
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.DatePicker
 import android.widget.TimePicker
 import androidx.appcompat.app.AppCompatActivity
+import com.github.kittinunf.fuel.httpPost
 import kotlinx.android.synthetic.main.activity_task.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import todoapp10.R
 import java.text.SimpleDateFormat
 import java.util.*
@@ -33,18 +31,14 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
     private val labels = arrayListOf("★", "★★", "★★★", "★★★★", "★★★★★")
 
 
-    val db by lazy {
-        AppDatabase.getDatabase(this)
-    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_task)
 
         dateEdt.setOnClickListener(this)
-        timeEdt.setOnClickListener(this)
-        saveBtn.setOnClickListener(this)
-
+        SearchBtn.setOnClickListener(this)
 
         setUpSpinner()
     }
@@ -66,7 +60,7 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
             R.id.timeEdt -> {
                 setTimeListener()
             }
-            R.id.saveBtn -> {
+            R.id.SearchBtn -> {
                 saveTodo()
             }
         }
@@ -74,26 +68,46 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun saveTodo() {
-        val category = spinnerCategory.selectedItem.toString()
+        val tag = spinnerCategory.selectedItem.toString()
+        val priority = labels.withIndex().first { tag == it.value }.index+1
         val title = titleInpLay.editText?.text.toString()
-        val description = taskInpLay.editText?.text.toString()
+        val id = 1
+        val name = "kato"
+        val pass = "soma"
 
-        GlobalScope.launch(Dispatchers.Main) {
-            val id = withContext(Dispatchers.IO) {
-                return@withContext db.todoDao().insertTask(
-                    TodoModel(
-                        title,
-                        description,
-                        category,
-                        finalDate,
-                        finalTime
-                    )
-                )
+        var myCalendar = java.util.Calendar.getInstance()
+        val sdf = SimpleDateFormat("yyyy/MM/dd")
+
+        val deadLine = sdf.format(finalDate)
+
+        val bodyJson = """
+            {"taskId":1,
+             "userId":${id},
+             "name":"${title}",
+             "deadLine":"${deadLine}",
+             "priority":${priority},
+             "share":false,
+             "tag":""
             }
-            finish()
+        """.trimIndent()
+
+
+
+        val baseUrl: String = "http://160.16.141.77:50180/user/${id}/task?name=${name}&pass=${pass}"
+        val endpoint: String = "/match.json"
+        val url: String = baseUrl
+
+        val header: HashMap<String, String> = hashMapOf("Content-Type" to "application/json")
+
+        url.httpPost().header(header).body(bodyJson).response { request, response, result ->
+            Log.i("testtask","${response}")
+            Log.i("testjson","${bodyJson}")
+
         }
 
+        finish()
     }
+
 
     private fun setTimeListener() {
         myCalendar = Calendar.getInstance()
@@ -112,12 +126,13 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         timePickerDialog.show()
     }
 
+
     private fun updateTime() {
         //Mon, 5 Jan 2020
         val myformat = "h:mm a"
         val sdf = SimpleDateFormat(myformat)
         finalTime = myCalendar.time.time
-        timeEdt.setText(sdf.format(myCalendar.time))
+
 
     }
 
@@ -148,8 +163,11 @@ class TaskActivity : AppCompatActivity(), View.OnClickListener {
         finalDate = myCalendar.time.time
         dateEdt.setText(sdf.format(myCalendar.time))
 
-        timeInptLay.visibility = View.VISIBLE
+
 
     }
+
+
+
 
 }

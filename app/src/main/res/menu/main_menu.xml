@@ -2,13 +2,24 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <item android:id="@+id/history"
-        android:title="History"
-        app:showAsAction="never"/>
+    <item
+        android:id="@+id/frendlist"
+        android:title="FrendList"
+        app:showAsAction="never" />
 
-    <item android:id="@+id/search"
+    <item
+        android:id="@+id/searchfriend"
+        android:title="SearchFriend" />
+    <item
+        android:id="@+id/applyfriend"
+        android:title="Apply" />
+    <item
+        android:id="@+id/friendtask"
+        android:title="FriendTask" />
+    <item
+        android:id="@+id/search"
         android:title="Search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
-        app:showAsAction="ifRoom|collapseActionView"/>
+        app:showAsAction="ifRoom|collapseActionView" />
 
 </menu>

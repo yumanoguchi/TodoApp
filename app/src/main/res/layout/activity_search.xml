@@ -15,11 +15,11 @@
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbarsearchf"
-            app:title="New Task"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="Search Friend" />
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -29,7 +29,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginBottom="4dp"
-        android:text="タスク名"
+        android:text="フレンドID"
         android:textColor="@color/colorAccent"
         android:textSize="16sp" />
 
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:id="@+id/titleInpLay"
+        android:id="@+id/FriendIDInpLay"
         app:hintTextColor="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
         android:layout_marginEnd="16dp"
@@ -46,9 +46,9 @@
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter Task title"
+            android:hint="Enter Friend ID"
+            android:inputType="numberDecimal"
             android:paddingStart="8dp"
-            android:inputType="textCapWords"
             android:paddingEnd="8dp"
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
@@ -63,33 +63,26 @@
         android:id="@+id/taskInpLay"
         android:layout_marginBottom="16dp"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="4dp"
-        android:text="タスクの期限を設定"
-        android:textColor="@color/colorAccent"
-        android:textSize="16sp" />
-
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         app:hintTextColor="@color/colorAccent"
         app:boxStrokeColor="@color/colorAccent"
-        android:layout_marginEnd="16dp"
+        android:visibility="gone"
+        android:id="@+id/timeInptLay"
         android:layout_marginBottom="16dp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Set Date"
+            android:hint="Set Time"
             android:clickable="true"
-            android:id="@+id/dateEdt"
+            android:id="@+id/timeEdt"
             android:cursorVisible="false"
             android:drawablePadding="8dp"
-            android:drawableEnd="@drawable/ic_date_range_black_24dp"
+            android:drawableEnd="@drawable/ic_access_time_black_24dp"
             android:drawableTint="@color/colorAccent"
             android:focusable="false"
             android:paddingStart="8dp"
@@ -97,41 +90,16 @@
             android:textSize="18sp" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:orientation="horizontal"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp">
-
-        <Spinner
-            android:id="@+id/spinnerCategory"
-            android:layout_weight="1"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="16dp" />
-
-        <ImageView
-            android:id="@+id/imgAddCategory"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_playlist_add_black_24dp"
-            android:tint="@color/colorAccent" />
-    </LinearLayout>
-
     <com.google.android.material.button.MaterialButton
-        android:text="Save Task"
         android:id="@+id/SearchBtn"
-        app:backgroundTint="@color/colorAccent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="16dp"
-        android:layout_gravity="end"
-        app:cornerRadius="25dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:text="Apply"
+        app:backgroundTint="@color/colorAccent"
+        app:cornerRadius="25dp" />
 
 
 </LinearLayout>

@@ -37,18 +37,13 @@ class TodoAdapter(val list: List<TodoModel>) : RecyclerView.Adapter<TodoAdapter.
                 val randomColor = colors[Random().nextInt(colors.size)]
                 viewColorTag.setBackgroundColor(randomColor)
                 txtShowTitle.text = todoModel.title
-                txtShowTask.text = todoModel.description
                 txtShowCategory.text = todoModel.category
-                updateTime(todoModel.time)
                 updateDate(todoModel.date)
 
             }
         }
         private fun updateTime(time: Long) {
-            //Mon, 5 Jan 2020
-            val myformat = "h:mm a"
-            val sdf = SimpleDateFormat(myformat)
-            itemView.txtShowTime.text = sdf.format(Date(time))
+
 
         }
 
